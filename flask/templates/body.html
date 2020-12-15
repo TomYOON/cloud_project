@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" href="../static/css/table.css">
+<script type="text/javascript" src="../static/js/dropdown.js"></script>
+<form name="form1" id="form1" action="/selectSiDo" method= "POST" enctype="multipart/form-data">
+    시/도: <select name="sido" id="sido">
+        <option value="" selected="selected">시/도를 선택하세요.</option>
+      </select>
+
+      &nbsp;시/군/구: <select name="gu" id="gu">
+        <option value="전체" selected="selected">전체</option>
+      </select>
+      &nbsp;조회 시작일: <input type="month" id="start" name="start" min="2015-01" value="2020-01" onchange=""/>
+      &nbsp;조회 종료일: <input type="month" id="end" name="end" min="2015-02" value="2020-02"/>
+
+      
+      <input type="submit" value="Submit">
+      </form>
+    <br> <br>
+    <img onclick="controlGraph()" src="../static/img/graph.png" alt="graph_button" style="height: 30px; cursor: pointer; position: center;">
+    <div id="graph" style="display: none;">
+        <div id="piechart_3d" style="width: 500px; height: 250px; display: inline-block; margin: 0 auto; "></div>
+        <div id="curve_chart" style="width: 500px; height: 250px; display: inline-block; margin: 0 auto; "></div>
+    </div>
+    <div style="overflow:auto; height:1000px;">
+        &nbsp검색&nbsp<input type="text" id="myInput" onkeyup="searchByName()" placeholder="건물명으로 검색" title="search">
+        <table id="dataTable">
+        <tr>
+            <th>주소</th>
+            <th>분류</th> 
+            <th>거래 금액</th>
+            <th>면적</th>
+            <th>면적 대비 거래금액 (만원)</th>
+            <th>거래 날짜</th>
+            <th>건물이름</th>
+        </tr>
+        {% for data in data_list %}
+        <tr>
+            <td>{{data.addr}}</td>
+            <td>{{data.category}}</td>
+            <td>{{data.price}}</td>
+            <td>{{data.area}}</td>
+            <td>{{data.price_per_area}}</td>
+            <td>{{data.date}}</td>
+            <td style = "cursor:pointer;" onClick = " location.href='https://map.naver.com/v5/search/{{data.name}}' " onMouseOver = " window.status = 'https://map.naver.com/v5/search/{{data.name}}' " onMouseOut = " window.status = '' ">
+            {{data.name}}</td>
+            
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
+
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+			{% for key, value in count_data.items() %}
+				{% if value is string %}
+					['{{ key }}', '{{ value }}'],
+				{% else %}
+					['{{ key }}', {{ value }}],
+				{% endif %}
+			{% endfor %}
+        ]);
+
+        var options = {
+          title: '주택 종류별 거래 비율',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart2);
+  
+        function drawChart2() {
+          var data = google.visualization.arrayToDataTable([
+          ['date', '아파트', '다세대', '다가구', '단독'],
+          {% for date, avg_apart, avg_dasaedae, avg_dagagu, avg_dandok in line_data %}
+				['{{ date }}', {{ avg_apart }}, {{ avg_dasaedae }}, {{ avg_dagagu }}, {{ avg_dandok }}],
+		   {% endfor %}
+          ]);
+  
+          var options = {
+            title: '평균 거래량 추이',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+          };
+  
+          var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+  
+          chart.draw(data, options);
+        }
+      </script>
+    <script>
+      function searchByName() {
+          var input, filter, table, tr, td, i, txtValue;
+          input = document.getElementById("myInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("dataTable");
+          tr = table.getElementsByTagName("tr");
+          for (i = 0; i < tr.length; i++) {
+              td = tr[i].getElementsByTagName("td")[6];
+              if (td) {
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                  tr[i].style.display = "";
+              } else {
+                  tr[i].style.display = "none";
+              }
+              }       
+          }
+      }
+      function controlGraph() {
+          var graph = document.getElementById("graph")
+          
+          if (graph.style.display == "inline-block") {
+              graph.style.display = "none";
+          }
+          else {
+              graph.style.display = "inline-block";
+          }
+      }
+    </script>
+{% endblock %}

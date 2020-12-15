@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한 눈에 보는 부동산 거래 정보</title>
+<link rel="shortcut icon" type="image/x-icon" href="../static/img/house.png">
+<link rel="stylesheet" href="../static/css/layout.css">
+</head>   
+<body>
+<div class="sample-header">
+    <div class="sample-header-section">
+      <h1 style="text-align: center;">한 눈에 보는 부동산 거래 정보</h1>
+      <h3 style="text-align: center;">원하는 지역의 부동산 거래 정보를 간단하게 볼 수 있어요! </h3>
+    </div>
+  </div>
+  <div class="sample-section-wrap">
+      
+    <div class="sample-section">
+ 
+        </form>
+      <!--각 페이지 콘텐츠 출력 영역-->
+        {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-6">
+          <h6>&nbspAbout</h6>
+          <p class="text-justify"> &nbspby Yoon Tae Sung <br> <i>&nbspkonkuk univ. </i> <br> &nbspYou can simply search for real estate transaction information by city and date.
+          <br>
+          &nbspAnd can see also the graph.
+        </p>
+        </div>
+    </div>
+    </div>
+</footer>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+<!-- <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script> -->
+
+<script>
+function parallax_height() {
+  var scroll_top = $(this).scrollTop();
+  var sample_section_top = $(".sample-section").offset().top;
+  var header_height = $(".sample-header-section").outerHeight();
+  $(".sample-section").css({ "margin-top": header_height });
+  $(".sample-header").css({ height: header_height - scroll_top });
+}
+parallax_height();
+$(window).scroll(function() {
+  parallax_height();
+});
+$(window).resize(function() {
+  parallax_height();
+});
+</script>
+  
