@@ -10,10 +10,10 @@
 3. 국토교통부_단독/다가구 매매 실거래 자료 
 (https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15058022)
 
-### 동작 페이지
+### 동작 화면
 ![image](https://user-images.githubusercontent.com/31751481/102386552-88953180-4012-11eb-8c35-4483761f3480.png)
 ![image](https://user-images.githubusercontent.com/31751481/102386595-96e34d80-4012-11eb-8fd6-bfca4256d9e4.png)
-
+![image](https://user-images.githubusercontent.com/31751481/102387001-31dc2780-4013-11eb-9b49-24485dae3c76.png)
 
 ### 실행
 플라스크 폴더에서 serviceKey.txt에 서비스키 넣은 후
